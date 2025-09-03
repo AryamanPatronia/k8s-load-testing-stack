@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-generator-deployment
+  namespace: monitoring  #The monitoring namespace that we created...
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: load-generator
+  template:
+    metadata:
+      labels:
+        app: load-generator
+    spec:
+      containers:
+        - name: load-generator
+          image: localhost:32000/load-generator #We have pushed our load-generator image here...
+          env:
+            - name: TARGET
+              value: "http://192.168.0.100:30000/primecheck"
+            - name: FREQUENCY
+              value: "5"
